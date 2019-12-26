@@ -7,6 +7,9 @@ class Home extends Component {
             <div>
             <Header 
             showLogo={true}
+            history={this.props.history}
+            showLoginModal={true}
+            enableMyAccount={true}
             />
             Home Page 
             </div>

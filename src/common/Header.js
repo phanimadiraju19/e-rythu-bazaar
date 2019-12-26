@@ -2,8 +2,8 @@ import React, { Component } from "react";
 //import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import './Header.css';
 
-import * as UtilsUI from "../../common/UtilsUI";
-import * as Constants from "../../common/Constants";
+import * as UtilsUI from "../common/UtilsUI";
+import * as Constants from "../common/Constants";
 import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -20,7 +20,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import accountCircle from "@material-ui/icons/AccountCircle";
 import FastFoodIcon from '@material-ui/icons/Fastfood';
 //import SearchIcon from '@material-ui/icons/Search';
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+//import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 // custom styles for upload modal
 const customStyles = {
@@ -68,7 +68,6 @@ class Header extends Component {
         this.loginSignedupCustomer = this.loginSignedupCustomer.bind(this);
         this.inputFirstNameChangeHandler = this.inputFirstNameChangeHandler.bind(this);
         this.inputLastNameChangeHandler = this.inputLastNameChangeHandler.bind(this);
-        this.inputEmailChangeHandler = this.inputEmailChangeHandler.bind(this);
         this.inputRegisterPasswordChangeHandler = this.inputRegisterPasswordChangeHandler.bind(this);
         this.inputContactChangeHandler = this.inputContactChangeHandler.bind(this);
         this.signupNewCustomer = this.signupNewCustomer.bind(this);
@@ -89,18 +88,18 @@ class Header extends Component {
         },
         loginErrorMsg: "", // error message displayed for wrong credentials in the login form 
         signupFormUserValues: {
-            contact: "",
-            email: "",
             firstname: "",
             lastname: "",
+            contact: "",
             registerPassword: "",
+            role:""
         },
         signupFormValidationClassNames: {
             // object containing the classnames for the validation messages displayed below the text fields of the signup form
             contact: Constants.DisplayClassname.DISPLAY_NONE,
-            email: Constants.DisplayClassname.DISPLAY_NONE,
             firstname: Constants.DisplayClassname.DISPLAY_NONE,
-            registerPassword: Constants.DisplayClassname.DISPLAY_NONE
+            registerPassword: Constants.DisplayClassname.DISPLAY_NONE,
+            role:Constants.DisplayClassname.DISPLAY_NONE
         },
         modalIsOpen: false,//login modal state is closed
         value: 0,//Initial value for tab container is set to '0'
@@ -109,12 +108,6 @@ class Header extends Component {
         registerSnackBarIsOpen: false,
         showUserProfileDropDown: false, // boolean value indicating if the user profile dropdown is open; TRUE for open and FALSE for closed
         loggedIn: sessionStorage.getItem("access-token") == null ? false : true,//Logged in status is null if there is no accesstoken in sessionstorage
-        loggedInUserInfo:[],
-        signupFailStatus: [],
-        
-       
-           
-    
     };
 
     /**
@@ -184,7 +177,7 @@ class Header extends Component {
     * @param event defualt parameter for onChange
     * @memberof Header (Login/Signup modal)
     */
-    inputEmailChangeHandler = event => {
+    inputRoleChangeHandler = event => {
         let currentSignupFormValues = { ...this.state.signupFormUserValues };
         currentSignupFormValues.email = event.target.value;
         this.setState({ signupFormUserValues: currentSignupFormValues });
@@ -294,8 +287,8 @@ class Header extends Component {
             this.state.signupFormUserValues.contact,
             Constants.ValueTypeEnum.FORM_FIELD
         );
-        let email_validation_classname = UtilsUI.findValidationMessageClassname(
-            this.state.signupFormUserValues.email,
+        let role_validation_classname = UtilsUI.findValidationMessageClassname(
+            this.state.signupFormUserValues.role,
             Constants.ValueTypeEnum.FORM_FIELD
         );
         let firstname_validation_classname = UtilsUI.findValidationMessageClassname(
@@ -307,10 +300,10 @@ class Header extends Component {
             Constants.ValueTypeEnum.FORM_FIELD
         );
 
-        // setting the class names for the contactno,email, firstname and password validation messages - to be displayed or not
+        // setting the class names for the contactno,role, firstname and password validation messages - to be displayed or not
         let currentSignupFormValidationClassNames = { ...this.state.signupFormValidationClassNames };
         currentSignupFormValidationClassNames.contact = contact_validation_classname;
-        currentSignupFormValidationClassNames.email = email_validation_classname;
+        currentSignupFormValidationClassNames.role = role_validation_classname;
         currentSignupFormValidationClassNames.firstname = firstname_validation_classname;
         currentSignupFormValidationClassNames.registerPassword = registerPassword_validation_classname;
 
@@ -318,14 +311,10 @@ class Header extends Component {
             signupFormValidationClassNames: currentSignupFormValidationClassNames,
             
         });
-
-        /* (this.state.signupFormUserValues.contact.length!==10)
-         ? this.setState({ signupErrorMsg:Constants.VALIDATE_CONTACT_ERROR_MSG})
-         : this.setState({ signupErrorMsg:null});*/
         
         let dataSignup = JSON.stringify({
             "contact_number": this.state.signupFormUserValues.contact,
-            "email_address": this.state.signupFormUserValues.email,
+            "role": this.state.signupFormUserValues.role,
             "first_name": this.state.signupFormUserValues.firstname,
             "last_name": this.state.signupFormUserValues.lastname,
             "password": this.state.signupFormUserValues.registerPassword
@@ -341,13 +330,7 @@ class Header extends Component {
                     registerSnackBarIsOpen: true
                 });
             }
-            /*else{
-                
-               that.setState({
-                signupFailStatus: JSON.parse(this.responseText)
-             });
-
-            }*/
+            
         }
         });
 
@@ -355,9 +338,9 @@ class Header extends Component {
         xhrSignup.setRequestHeader("Content-Type", "application/json");
         xhrSignup.setRequestHeader("Cache-Control", "no-cache");
         xhrSignup.send(dataSignup);
-        //console.log(this.state.signupFailStatus.message);
+        
     };
-    /* CHECK => why responseText shows diabled , n why snack bar doesnt open on successful signup*/
+    
     
     loginSnackBarCloseHandler = (e) => {
         this.setState({ loginSnackBarIsOpen: false });
@@ -365,9 +348,7 @@ class Header extends Component {
     registerSnackBarCloseHandler = (e) => {
         this.setState({ registerSnackBarIsOpen: false });
     }
-    searchValueChangeHandler = (e) => {
-        this.setState({ searchValue: e.target.value });
-    }
+    
 
     /**
       * Event handler called when the profile icon inside the header is clicked to toggle the user profile dropdown
@@ -562,7 +543,7 @@ class Header extends Component {
         }
 
         return (
-                <MuiThemeProvider>
+                
                 <div className="header-main-container">
                     <div className="header-logo-container">{logoToRender}</div>
                     {loginButtonModalToRender}
@@ -570,7 +551,7 @@ class Header extends Component {
                     {loginSnackBarToRender}
                     {registerSnackBarToRender}    
                 </div> 
-                </MuiThemeProvider>   
+                 
             
         );
 
@@ -581,7 +562,7 @@ Header.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Header);
+export default withStyles(customStyles)(Header);
 
         
         
