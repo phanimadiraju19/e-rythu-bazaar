@@ -412,7 +412,7 @@ class Header extends Component {
 
         id: Math.floor(new Date().getTime() / 1000),
       item_name: this.state.uploadImageFormValues.description,
-      photo_URL: this.state.uploadImageFormValues.imageFile,
+      photo_URL: this.state.uploadImageFormValues.imagePreviewUrl,
       price: this.state.uploadImageFormValues.pricePerUnit,
       quantity: this.state.uploadImageFormValues.quantityAvailable,
       expdate: this.state.uploadImageFormValues.expiryDate
@@ -420,6 +420,9 @@ class Header extends Component {
       };
 
       this.props.uploadNewImage(imageDetails);
+      console.log(this.state.uploadImageFormValues);
+      console.log(imageDetails);
+      console.log(imageDetails.photo_URL);
       this.closeUploadImageModal();
     }
   };

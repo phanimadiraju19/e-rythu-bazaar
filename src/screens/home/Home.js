@@ -6,7 +6,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import ItemCard from './ItemCard';
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import ImageData from "../../common/ImageData";
+import imageData from "../../common/ImageData";
 
 // inline styles for Material-UI components
 const styles = theme => ({
@@ -43,7 +43,7 @@ class Home extends Component {
     
       state = {
         
-        imageData: [], // array containing all the images posted by the currently logged-in user
+        imageData: imageData, // array containing all the images posted by the currently logged-in user
         
       };
 
@@ -75,7 +75,7 @@ class Home extends Component {
             />
             <div className="items-main-container">
             <GridList cellHeight ={400} className={classes.gridListMain} cols={4}>
-              {ImageData.map(item => (
+              {this.state.imageData.map(item => (
                 <GridListTile key={"item" + item.id}  >
                   <Grid container className={classes.root} >
                     <Grid item>
