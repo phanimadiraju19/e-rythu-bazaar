@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 //import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import './Header.css';
-
+import * as Utils from "../common/Utils";
 import * as UtilsUI from "../common/UtilsUI";
 import * as Constants from "../common/Constants";
 import { Link } from "react-router-dom";
@@ -17,8 +17,10 @@ import Input from '@material-ui/core/Input';
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import accountCircle from "@material-ui/icons/AccountCircle";
-import FastFoodIcon from '@material-ui/icons/Fastfood';
+import accountCircle from '../assets/icon/accountCircle.svg';
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+
+//import FastFoodIcon from '@material-ui/icons/Fastfood';
 //import SearchIcon from '@material-ui/icons/Search';
 //import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
@@ -33,6 +35,19 @@ const customStyles = {
         transform: "translate(-50%, -50%)"
     }
 };
+
+// inline styles for Material-UI components
+const styles = {
+    searchInput: {
+      width: "80%"
+    },
+    uploadIcon: {
+      paddingLeft: 10
+    },
+    profileIconButton: {
+      padding: 0
+    }
+  };
 
 /**
  * Functional component for displaying Tab components
@@ -73,7 +88,9 @@ class Header extends Component {
         this.signupNewCustomer = this.signupNewCustomer.bind(this);
         this.logoutClickHandler = this.logoutClickHandler.bind(this);
         this.openUserProfileHandler = this.openUserProfileHandler.bind(this);
-    
+        this.inputRoleChangeHandler = this.inputRoleChangeHandler.bind(this);
+        this.selectImageForUpload = this.selectImageForUpload.bind(this);
+
     }
     state = {
         loginFormUserValues: {
@@ -92,15 +109,33 @@ class Header extends Component {
             lastname: "",
             contact: "",
             registerPassword: "",
-            role:""
+            role: ""
         },
         signupFormValidationClassNames: {
             // object containing the classnames for the validation messages displayed below the text fields of the signup form
             contact: Constants.DisplayClassname.DISPLAY_NONE,
             firstname: Constants.DisplayClassname.DISPLAY_NONE,
             registerPassword: Constants.DisplayClassname.DISPLAY_NONE,
-            role:Constants.DisplayClassname.DISPLAY_NONE
+            role: Constants.DisplayClassname.DISPLAY_NONE
         },
+        uploadImageFormValues: {
+            // object containing values filled by the user in the upload image modal
+            imageFile: {}, // image file containing the new image selected by the user from the system
+            imagePreviewUrl: "", // preview URL the new image file selected by the user from the system
+            description: "", // description for the new image to be uploaded
+            quantityAvailable: "", // quantity for the new image/item to be uploaded
+            pricePerUnit:"",//price of the item per unit 
+            expiryDate:""//expiry date of the item uploaded
+          },
+          uploadImageFormValidationClassnames: {
+            // object containing validation classnames for the form fields inside the upload image modal
+            image: Constants.DisplayClassname.DISPLAY_NONE,
+            description: Constants.DisplayClassname.DISPLAY_NONE,
+            quantityAvailable:Constants.DisplayClassname.DISPLAY_NONE,
+            pricePerUnit:Constants.DisplayClassname.DISPLAY_NONE,
+            expiryDate:Constants.DisplayClassname.DISPLAY_NONE
+            
+          },
         modalIsOpen: false,//login modal state is closed
         value: 0,//Initial value for tab container is set to '0'
         signupSuccess: false,//signup status is false
@@ -114,19 +149,19 @@ class Header extends Component {
     * Event handler called when the login button inside the header is clicked to open the login and signup modal
     * @memberof Header
     */
-    openModalHandler = () => { this.setState({ modalIsOpen: true });}
+    openModalHandler = () => { this.setState({ modalIsOpen: true }); }
 
     /**
     * Event handler called when the user clicks outside the modal or intends to close the modal 
     * @memberof Header
     */
-    closeModalHandler = () => {this.setState({ modalIsOpen: false });}
+    closeModalHandler = () => { this.setState({ modalIsOpen: false }); }
 
     /**
     * Event handler called when the user tries to navigate to different tabs
     * @memberof Header
     */
-    tabChangeHandler = (event, value) => {this.setState({ value });}
+    tabChangeHandler = (event, value) => { this.setState({ value }); }
 
     /**
     * Event handler called when the contactno text field is changed by the user in Login form
@@ -173,13 +208,13 @@ class Header extends Component {
     };
 
     /**
-    * Event handler called when the email text field is changed by the user in Signup form
+    * Event handler called when the role field is changed by the user in Signup form
     * @param event defualt parameter for onChange
     * @memberof Header (Login/Signup modal)
     */
     inputRoleChangeHandler = event => {
         let currentSignupFormValues = { ...this.state.signupFormUserValues };
-        currentSignupFormValues.email = event.target.value;
+        currentSignupFormValues.role = event.target.value;
         this.setState({ signupFormUserValues: currentSignupFormValues });
     };
 
@@ -204,6 +239,191 @@ class Header extends Component {
         currentSignupFormValues.contact = event.target.value;
         this.setState({ signupFormUserValues: currentSignupFormValues });
     };
+
+    /**
+   * Event handler called when an image of item  is selected by a user to be uploaded
+   * @param event default parameter on which the event handler is called
+   * @memberof Header
+   */
+  selectImageForUpload = event => {
+    event.preventDefault();
+
+    const reader = new FileReader();
+    const file = event.target.files[0];
+
+    reader.onloadend = () => {
+      const currentUploadImageFormValues = {
+        ...this.state.uploadImageFormValues
+      };
+      currentUploadImageFormValues.imageFile = file;
+      currentUploadImageFormValues.imagePreviewUrl = reader.result;
+      this.setState({
+        uploadImageFormValues: currentUploadImageFormValues
+      });
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+
+  /**
+   * Event handler called when the description input field is changed inside the upload image/item modal
+   * @param event default parameter on which the event handler is called
+   * @memberof Header
+   */
+  changeDescriptionHandlerInUploadImageModal = event => {
+    let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
+    currentUploadImageFormValues.description = event.target.value;
+    this.setState({
+      uploadImageFormValues: currentUploadImageFormValues
+    });
+  };
+
+  /**
+   * Event handler called when the quantity available input field is changed inside the upload image modal
+   * @param event default parameter on which the event handler is called
+   * @memberof Header
+   */
+  changeQuantityAvailableHandlerInUploadImageModal = event => {
+    let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
+    currentUploadImageFormValues.quantityAvailable = event.target.value;
+    this.setState({
+      uploadImageFormValues: currentUploadImageFormValues
+    });
+  };
+
+  /**
+   * Event handler called when the price per unit  input field is changed inside the upload image modal
+   * @param event default parameter on which the event handler is called
+   * @memberof Header
+   */
+  changePricePerUnitHandlerInUploadImageModal = event => {
+    let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
+    currentUploadImageFormValues.pricePerUnit = event.target.value;
+    this.setState({
+      uploadImageFormValues: currentUploadImageFormValues
+    });
+  };
+
+  /**
+   * Event handler called when the expiry date   input field is changed inside the upload image modal
+   * @param event default parameter on which the event handler is called
+   * @memberof Header
+   */
+  changeExpiryDateHandlerInUploadImageModal = event => {
+    let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
+    currentUploadImageFormValues.expiryDate = event.target.value;
+    this.setState({
+      uploadImageFormValues: currentUploadImageFormValues
+    });
+  };
+
+
+  /**
+   * Event handler called when the upload button inside the header is clicked to open the upload image modal
+   * @memberof Header
+   */
+  openUploadImageModal = () => {
+    this.setState({
+      isUploadModalOpen: true
+    });
+  };
+
+  /**
+   * Event handler called to close upload image modal
+   * @memberof Header
+   */
+  closeUploadImageModal = () => {
+    let newUploadImageModalFormValues = { ...this.state.uploadImageFormValues };
+    Utils.assignEmptyStringToAllKeysInObj(newUploadImageModalFormValues);
+    const currentUploadImageFormValidationClassnames = {
+      ...this.uploadImageFormValidationClassnames
+    };
+
+    currentUploadImageFormValidationClassnames.image =
+      Constants.DisplayClassname.DISPLAY_NONE;
+    currentUploadImageFormValidationClassnames.description =
+      Constants.DisplayClassname.DISPLAY_NONE;
+    currentUploadImageFormValidationClassnames.quantityAvailable =
+      Constants.DisplayClassname.DISPLAY_NONE;
+      currentUploadImageFormValidationClassnames.pricePerUnit =
+      Constants.DisplayClassname.DISPLAY_NONE;
+      currentUploadImageFormValidationClassnames.expiryDate =
+      Constants.DisplayClassname.DISPLAY_NONE;
+
+    this.setState({
+      isUploadModalOpen: false,
+      uploadImageFormValues: newUploadImageModalFormValues,
+      uploadImageFormValidationClassnames: currentUploadImageFormValidationClassnames
+    });
+  };
+
+
+
+  /**
+   * Event handler called when the 'Upload' button inside the upload image/item modal is clicked
+   * @memberof Header
+   */
+  uploadClickHandlerInUploadModal = () => {
+    // finding the class names for the desciption ,qty,price,exp date validation messages - to be displayed or not
+    const image_validation_classname = UtilsUI.findValidationMessageClassname(
+      this.state.uploadImageFormValues.imagePreviewUrl,
+      Constants.ValueTypeEnum.FORM_FIELD
+    );
+    const description_validation_classname = UtilsUI.findValidationMessageClassname(
+      this.state.uploadImageFormValues.description,
+      Constants.ValueTypeEnum.FORM_FIELD
+    );
+    const quantity_available_validation_classname = UtilsUI.findValidationMessageClassname(
+        this.state.uploadImageFormValues.quantityAvailable,
+        Constants.ValueTypeEnum.FORM_FIELD
+      );
+
+      const price_per_unit_validation_classname = UtilsUI.findValidationMessageClassname(
+        this.state.uploadImageFormValues.pricePerUnit,
+        Constants.ValueTypeEnum.FORM_FIELD
+      );
+      const expiry_date_validation_classname = UtilsUI.findValidationMessageClassname(
+        this.state.uploadImageFormValues.expiryDate,
+        Constants.ValueTypeEnum.FORM_FIELD
+      );
+    
+
+    // setting the class names for the desciption and hashtags validation messages - to be displayed or not
+    let currentUploadImageFormValidationClassnames = {
+      ...this.state.uploadImageFormValidationClassnames
+    };
+    currentUploadImageFormValidationClassnames.image = image_validation_classname;
+    currentUploadImageFormValidationClassnames.description = description_validation_classname;
+    currentUploadImageFormValidationClassnames.quantityAvailable = quantity_available_validation_classname;
+    currentUploadImageFormValidationClassnames.pricePerUnit=price_per_unit_validation_classname;
+    currentUploadImageFormValidationClassnames.expiryDate=expiry_date_validation_classname;
+
+    if (
+      Utils.isAnyValueOfObjectUndefinedOrNullOrEmpty(
+        this.state.uploadImageFormValues
+      )
+    ) {
+      this.setState({
+        uploadImageFormValidationClassnames: currentUploadImageFormValidationClassnames
+      });
+    } else {
+      const imageDetails = {
+
+        id: Math.floor(new Date().getTime() / 1000),
+      item_name: this.state.uploadImageFormValues.description,
+      photo_URL: this.state.uploadImageFormValues.imageFile,
+      price: this.state.uploadImageFormValues.pricePerUnit,
+      quantity: this.state.uploadImageFormValues.quantityAvailable,
+      expdate: this.state.uploadImageFormValues.expiryDate
+        
+      };
+
+      this.props.uploadNewImage(imageDetails);
+      this.closeUploadImageModal();
+    }
+  };
+
 
     /**
    * Event handler called when the user clicks on the login button in Login modal
@@ -236,28 +456,29 @@ class Header extends Component {
         this.setState({
             loginFormValidationClassNames: currentLoginFormValidationClassNames,
         });
-        
-        
-            
+
+
+
         let dataLogin = null;
         let xhrLogin = new XMLHttpRequest();
         let that = this;
         xhrLogin.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                if (xhrLogin.status === 200 || xhrLogin.status === 201){
-                sessionStorage.setItem("uuid", JSON.parse(this.responseText).id);
-                sessionStorage.setItem("access-token", xhrLogin.getResponseHeader("access-token"));
+                if (xhrLogin.status === 200 || xhrLogin.status === 201) {
+                    sessionStorage.setItem("uuid", JSON.parse(this.responseText).id);
+                    sessionStorage.setItem("access-token", xhrLogin.getResponseHeader("access-token"));
 
-                that.setState({
-                    loggedIn: true,
-                    loginSnackBarIsOpen: true,
-                    
-                });
 
-                that.closeModalHandler();
+                    that.setState({
+                        loggedIn: true,
+                        loginSnackBarIsOpen: true,
 
+                    });
+
+                    that.closeModalHandler();
+
+                }
             }
-        }
         });
 
         xhrLogin.open("POST", "http://localhost:8080/api/customer/login");
@@ -266,8 +487,8 @@ class Header extends Component {
         xhrLogin.setRequestHeader("Cache-Control", "no-cache");
         xhrLogin.send(dataLogin);
 
-           
-        };
+
+    };
 
     /**
    * Event handler called when the user clicks on the signup button in Signup modal
@@ -309,9 +530,9 @@ class Header extends Component {
 
         this.setState({
             signupFormValidationClassNames: currentSignupFormValidationClassNames,
-            
+
         });
-        
+
         let dataSignup = JSON.stringify({
             "contact_number": this.state.signupFormUserValues.contact,
             "role": this.state.signupFormUserValues.role,
@@ -324,31 +545,31 @@ class Header extends Component {
         let that = this;
         xhrSignup.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                if (xhrSignup.status === 200 || xhrSignup.status === 201){
-                that.setState({
-                    signupSuccess: true,
-                    registerSnackBarIsOpen: true
-                });
+                if (xhrSignup.status === 200 || xhrSignup.status === 201) {
+                    that.setState({
+                        signupSuccess: true,
+                        registerSnackBarIsOpen: true
+                    });
+                }
+
             }
-            
-        }
         });
 
         xhrSignup.open("POST", "http://localhost:8080/api/customer/signup");
         xhrSignup.setRequestHeader("Content-Type", "application/json");
         xhrSignup.setRequestHeader("Cache-Control", "no-cache");
         xhrSignup.send(dataSignup);
-        
+
     };
-    
-    
+
+
     loginSnackBarCloseHandler = (e) => {
         this.setState({ loginSnackBarIsOpen: false });
     }
     registerSnackBarCloseHandler = (e) => {
         this.setState({ registerSnackBarIsOpen: false });
     }
-    
+
 
     /**
       * Event handler called when the profile icon inside the header is clicked to toggle the user profile dropdown
@@ -390,7 +611,7 @@ class Header extends Component {
             );
         }
 
-        
+
 
         //login button and modal component  to be rendered inside the header
         let loginButtonModalToRender = null;
@@ -407,8 +628,9 @@ class Header extends Component {
                         style={customStyles}
                     >
                         <Tabs className="tabs" value={this.state.value} onChange={this.tabChangeHandler}>
-                            <Tab label="Login" />
+
                             <Tab label="Signup" />
+                            <Tab label="Login" />
                         </Tabs>
 
                         {this.state.value === 1 &&
@@ -430,7 +652,7 @@ class Header extends Component {
                                 </FormControl>
                                 <br /><br />
                                 <Button variant="contained" color="primary" onClick={this.loginSignedupCustomer}>LOGIN</Button>
-                                
+
                             </TabContainer>
                         }
 
@@ -450,9 +672,9 @@ class Header extends Component {
                                 </FormControl>
                                 <br /><br />
                                 <FormControl required>
-                                    <InputLabel htmlFor="email">Email</InputLabel>
-                                    <Input id="email" type="text" email={this.state.email} onChange={this.inputEmailChangeHandler} />
-                                    <FormHelperText className={this.state.signupFormValidationClassNames.email}>
+                                    <InputLabel htmlFor="contact">Contact No.</InputLabel>
+                                    <Input id="contact" type="text" contact={this.state.contact} onChange={this.inputContactChangeHandler} />
+                                    <FormHelperText className={this.state.signupFormValidationClassNames.contact}>
                                         <span className="red">required</span>
                                     </FormHelperText>
 
@@ -467,17 +689,157 @@ class Header extends Component {
                                 </FormControl>
                                 <br /><br />
                                 <FormControl required>
-                                    <InputLabel htmlFor="contact">Contact No.</InputLabel>
-                                    <Input id="contact" type="text" contact={this.state.contact} onChange={this.inputContactChangeHandler} />
-                                    <FormHelperText className={this.state.signupFormValidationClassNames.contact}>
+                                    <InputLabel htmlFor="role">Role</InputLabel>
+                                    <Input id="role" type="text" role={this.state.role} onChange={this.inputRoleChangeHandler} />
+                                    <FormHelperText className={this.state.signupFormValidationClassNames.role}>
                                         <span className="red">required</span>
                                     </FormHelperText>
-
                                 </FormControl>
                                 <br /><br />
                                 <Button variant="contained" color="primary" onClick={this.signupNewCustomer}>SIGNUP</Button>
                             </TabContainer>
                         }
+                    </Modal>
+                </div>
+            );
+        }
+
+        // upload button to be rendered inside the header
+        let uploadButtonToRender = null;
+        if (this.props.showUpload) {
+            uploadButtonToRender = (
+                <div className="header-upload-btn-container">
+                    <Button
+                        className="button"
+                        variant="contained"
+                        color="primary"
+                        onClick={this.openUploadImageModal}
+                    >
+                        Upload
+            <CloudUploadIcon className={classes.uploadIcon} />
+                    </Button>
+
+                    <Modal
+                        ariaHideApp={false}
+                        isOpen={this.state.isUploadModalOpen}
+                        contentLabel="Login"
+                        onRequestClose={this.closeUploadImageModal}
+                        style={customStyles}
+                    >
+                        <Typography variant="headline" component="h2">
+                            UPLOAD
+            </Typography>
+                        <br />
+                        <br />
+
+                        <div>
+                            <input
+                                required
+                                type="file"
+                                accept="image/*"
+                                onChange={this.selectImageForUpload}
+                            />
+                            <div
+                                className={this.state.uploadImageFormValidationClassnames.image}
+                            >
+                                <span className="error-msg">required</span>
+                                <br />
+                                <br />
+                            </div>
+                            {!Utils.isUndefinedOrNullOrEmpty(
+                                this.state.uploadImageFormValues.imagePreviewUrl
+                            ) ? (
+                                    <div className="image-preview-container">
+                                        <img
+                                            alt="Preview"
+                                            className="image-preview"
+                                            src={this.state.uploadImageFormValues.imagePreviewUrl}
+                                        />
+                                    </div>
+                                ) : null}
+                        </div>
+
+                        <FormControl required>
+                            <InputLabel htmlFor="imageDescription">Description</InputLabel>
+                            <Input
+                                id="imageDescription"
+                                type="text"
+                                value={this.state.uploadImageFormValues.description}
+                                onChange={this.changeDescriptionHandlerInUploadImageModal}
+                            />
+                            <FormHelperText
+                                className={
+                                    this.state.uploadImageFormValidationClassnames.description
+                                }
+                            >
+                                <span className="error-msg">required</span>
+                            </FormHelperText>
+                        </FormControl>
+
+                        
+                        <br />
+                        <FormControl required>
+                            <InputLabel htmlFor="price">Price per unit</InputLabel>
+                            <Input
+                                id="price"
+                                type="text"
+                                value={this.state.uploadImageFormValues.pricePerUnit}
+                                onChange={this.changePricePerUnitHandlerInUploadImageModal}
+                            />
+                            <FormHelperText
+                                className={
+                                    this.state.uploadImageFormValidationClassnames.pricePerUnit
+                                }
+                            >
+                                <span className="error-msg">required</span>
+                            </FormHelperText>
+                        </FormControl>
+                        
+                        <br />
+                        <FormControl required>
+                            <InputLabel htmlFor="quantity">Quantity Available</InputLabel>
+                            <Input
+                                id="quantity"
+                                type="text"
+                                value={this.state.uploadImageFormValues.quantityAvailable}
+                                onChange={this.changeQuantityAvailableHandlerInUploadImageModal}
+                            />
+                            <FormHelperText
+                                className={
+                                    this.state.uploadImageFormValidationClassnames.quantityAvailable
+                                }
+                            >
+                                <span className="error-msg">required</span>
+                            </FormHelperText>
+                        </FormControl>
+                        
+                        <br />
+                        <FormControl required>
+                            <InputLabel htmlFor="expirydate">Expiry Date</InputLabel>
+                            <Input
+                                id="expirydate"
+                                type="text"
+                                value={this.state.uploadImageFormValues.expiryDate}
+                                onChange={this.changeExpiryDateHandlerInUploadImageModal}
+                            />
+                            <FormHelperText
+                                className={
+                                    this.state.uploadImageFormValidationClassnames.expiryDate
+                                }
+                            >
+                                <span className="error-msg">required</span>
+                            </FormHelperText>
+                        </FormControl>
+                        <br />
+                        <br />
+                        <Button
+                            className="button"
+                            variant="contained"
+                            color="secondary"
+                            onClick={this.uploadClickHandlerInUploadModal}
+                        >
+                            Upload
+            </Button>
                     </Modal>
                 </div>
             );
@@ -512,20 +874,20 @@ class Header extends Component {
             );
         }
 
-         //loginsnackbar component to be rendered upon successful login
-         let loginSnackBarToRender = null;
-         if (this.state.loginSnackBarIsOpen) {
-             loginSnackBarToRender = (
+        //loginsnackbar component to be rendered upon successful login
+        let loginSnackBarToRender = null;
+        if (this.state.loginSnackBarIsOpen) {
+            loginSnackBarToRender = (
                 <Snackbar
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'left', }}
-                open={this.state.loginSnackBarIsOpen}
-                autoHideDuration={3000}
-                onClose={this.loginSnackBarCloseHandler}
-                ContentProps={{ 'aria-describedby': 'message-id', }}
-                message={<span id="message-id">Logged in successfully!</span>}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left', }}
+                    open={this.state.loginSnackBarIsOpen}
+                    autoHideDuration={3000}
+                    onClose={this.loginSnackBarCloseHandler}
+                    ContentProps={{ 'aria-describedby': 'message-id', }}
+                    message={<span id="message-id">Logged in successfully!</span>}
                 />
-             );
-         }
+            );
+        }
 
         //registersnackbar component to be rendered upon successful signup
         let registerSnackBarToRender = null;
@@ -538,21 +900,22 @@ class Header extends Component {
                     onClose={this.registerSnackBarCloseHandler}
                     ContentProps={{ 'aria-describedby': 'message-id', }}
                     message={<span id="message-id">Registered successfully! Please login now!</span>}
-                    />
+                />
             );
         }
 
         return (
-                
-                <div className="header-main-container">
-                    <div className="header-logo-container">{logoToRender}</div>
-                    {loginButtonModalToRender}
-                    {profileIconButtonToRender}
-                    {loginSnackBarToRender}
-                    {registerSnackBarToRender}    
-                </div> 
-                 
-            
+
+            <div className="header-main-container">
+                <div className="header-logo-container">{logoToRender}</div>
+                {loginButtonModalToRender}
+                {profileIconButtonToRender}
+                {uploadButtonToRender}
+                {loginSnackBarToRender}
+                {registerSnackBarToRender}
+            </div>
+
+
         );
 
     }
@@ -562,7 +925,6 @@ Header.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(customStyles)(Header);
+export default withStyles(styles)(Header);
 
-        
-        
+

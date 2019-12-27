@@ -15,3 +15,8 @@
     float: left;
     color:white;
 }
+
+/*  account circle icon having a padding on right   */
+.accountCircle-logo {
+  padding-right: 6%;
+}

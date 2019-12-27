@@ -1,0 +1,12 @@
+#last-row{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    float:bottom;
+}
+
+
+.MuiPaper-root.MuiPaper-elevation1.MuiCard-root.makeStyles-card-176.MuiPaper-rounded {
+    width:auto;
+    height: auto;
+}
