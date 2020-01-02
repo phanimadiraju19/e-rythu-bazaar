@@ -7,6 +7,8 @@ import ItemCard from './ItemCard';
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import imageData from "../../common/ImageData";
+import Button from "@material-ui/core/Button";
+import  "./Home.css";
 
 // inline styles for Material-UI components
 const styles = theme => ({
@@ -44,6 +46,7 @@ class Home extends Component {
       state = {
         
         imageData: imageData, // array containing all the images posted by the currently logged-in user
+        //imageData:[] array showing newly uploaded items..no data shown from previous uploads..or api call..
         
       };
 
@@ -60,6 +63,11 @@ class Home extends Component {
     });
   };
 
+  placeOrder =()=>{
+    this.props.history.push({
+      pathname: "/order"
+    });
+  }
     render(){
 
         const { classes } = this.props;
@@ -88,6 +96,8 @@ class Home extends Component {
               ))};
             </GridList>
           </div>
+          <footer><Button variant="contained" color="primary" id="place-order-btn" onClick={this.placeOrder}>Click to place order </Button></footer>
+          
             </div>
             
         );

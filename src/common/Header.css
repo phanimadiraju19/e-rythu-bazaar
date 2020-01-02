@@ -6,10 +6,9 @@
     display: flex;
     justify-content: space-between;
 }
-.header-logo-container, .header-search-container, .header-login-btn-container, .header-user-profile-container {
+.header-logo-container, .header-search-container, .header-upload-btn-container, .header-profile-btn-container {
   align-self: center;
 }
-
 /* esale logo css */
 .logo-title-container {
     float: left;

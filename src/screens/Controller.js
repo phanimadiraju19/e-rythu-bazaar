@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Home from "./home/Home";
+import Order from "./order/Order";
 
 /**
  * Class component for controller
@@ -16,6 +17,7 @@ class Controller extends Component {
       <Router>
         <div className="main-container">
           <Route exact path="/" render={(props) => <Home {...props} baseUrl={this.baseUrl} />}/>
+          <Route  path='/order' render={(props) => <Order {...props} baseUrl={this.baseUrl}/>} />
 
           
         </div>

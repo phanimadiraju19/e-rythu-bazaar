@@ -4,7 +4,7 @@ import './Header.css';
 import * as Utils from "../common/Utils";
 import * as UtilsUI from "../common/UtilsUI";
 import * as Constants from "../common/Constants";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Modal from 'react-modal';
@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import accountCircle from '../assets/icon/accountCircle.svg';
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+//import SearchIcon from "@material-ui/icons/Search";
 
 //import FastFoodIcon from '@material-ui/icons/Fastfood';
 //import SearchIcon from '@material-ui/icons/Search';
@@ -39,15 +40,15 @@ const customStyles = {
 // inline styles for Material-UI components
 const styles = {
     searchInput: {
-      width: "80%"
+        width: "80%"
     },
     uploadIcon: {
-      paddingLeft: 10
+        paddingLeft: 10
     },
     profileIconButton: {
-      padding: 0
+        padding: 0
     }
-  };
+};
 
 /**
  * Functional component for displaying Tab components
@@ -124,18 +125,18 @@ class Header extends Component {
             imagePreviewUrl: "", // preview URL the new image file selected by the user from the system
             description: "", // description for the new image to be uploaded
             quantityAvailable: "", // quantity for the new image/item to be uploaded
-            pricePerUnit:"",//price of the item per unit 
-            expiryDate:""//expiry date of the item uploaded
-          },
-          uploadImageFormValidationClassnames: {
+            pricePerUnit: "",//price of the item per unit 
+            expiryDate: ""//expiry date of the item uploaded
+        },
+        uploadImageFormValidationClassnames: {
             // object containing validation classnames for the form fields inside the upload image modal
             image: Constants.DisplayClassname.DISPLAY_NONE,
             description: Constants.DisplayClassname.DISPLAY_NONE,
-            quantityAvailable:Constants.DisplayClassname.DISPLAY_NONE,
-            pricePerUnit:Constants.DisplayClassname.DISPLAY_NONE,
-            expiryDate:Constants.DisplayClassname.DISPLAY_NONE
-            
-          },
+            quantityAvailable: Constants.DisplayClassname.DISPLAY_NONE,
+            pricePerUnit: Constants.DisplayClassname.DISPLAY_NONE,
+            expiryDate: Constants.DisplayClassname.DISPLAY_NONE
+
+        },
         modalIsOpen: false,//login modal state is closed
         value: 0,//Initial value for tab container is set to '0'
         signupSuccess: false,//signup status is false
@@ -245,187 +246,187 @@ class Header extends Component {
    * @param event default parameter on which the event handler is called
    * @memberof Header
    */
-  selectImageForUpload = event => {
-    event.preventDefault();
+    selectImageForUpload = event => {
+        event.preventDefault();
 
-    const reader = new FileReader();
-    const file = event.target.files[0];
+        const reader = new FileReader();
+        const file = event.target.files[0];
 
-    reader.onloadend = () => {
-      const currentUploadImageFormValues = {
-        ...this.state.uploadImageFormValues
-      };
-      currentUploadImageFormValues.imageFile = file;
-      currentUploadImageFormValues.imagePreviewUrl = reader.result;
-      this.setState({
-        uploadImageFormValues: currentUploadImageFormValues
-      });
+        reader.onloadend = () => {
+            const currentUploadImageFormValues = {
+                ...this.state.uploadImageFormValues
+            };
+            currentUploadImageFormValues.imageFile = file;
+            currentUploadImageFormValues.imagePreviewUrl = reader.result;
+            this.setState({
+                uploadImageFormValues: currentUploadImageFormValues
+            });
+        };
+
+        reader.readAsDataURL(file);
     };
 
-    reader.readAsDataURL(file);
-  };
 
-
-  /**
-   * Event handler called when the description input field is changed inside the upload image/item modal
-   * @param event default parameter on which the event handler is called
-   * @memberof Header
-   */
-  changeDescriptionHandlerInUploadImageModal = event => {
-    let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
-    currentUploadImageFormValues.description = event.target.value;
-    this.setState({
-      uploadImageFormValues: currentUploadImageFormValues
-    });
-  };
-
-  /**
-   * Event handler called when the quantity available input field is changed inside the upload image modal
-   * @param event default parameter on which the event handler is called
-   * @memberof Header
-   */
-  changeQuantityAvailableHandlerInUploadImageModal = event => {
-    let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
-    currentUploadImageFormValues.quantityAvailable = event.target.value;
-    this.setState({
-      uploadImageFormValues: currentUploadImageFormValues
-    });
-  };
-
-  /**
-   * Event handler called when the price per unit  input field is changed inside the upload image modal
-   * @param event default parameter on which the event handler is called
-   * @memberof Header
-   */
-  changePricePerUnitHandlerInUploadImageModal = event => {
-    let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
-    currentUploadImageFormValues.pricePerUnit = event.target.value;
-    this.setState({
-      uploadImageFormValues: currentUploadImageFormValues
-    });
-  };
-
-  /**
-   * Event handler called when the expiry date   input field is changed inside the upload image modal
-   * @param event default parameter on which the event handler is called
-   * @memberof Header
-   */
-  changeExpiryDateHandlerInUploadImageModal = event => {
-    let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
-    currentUploadImageFormValues.expiryDate = event.target.value;
-    this.setState({
-      uploadImageFormValues: currentUploadImageFormValues
-    });
-  };
-
-
-  /**
-   * Event handler called when the upload button inside the header is clicked to open the upload image modal
-   * @memberof Header
-   */
-  openUploadImageModal = () => {
-    this.setState({
-      isUploadModalOpen: true
-    });
-  };
-
-  /**
-   * Event handler called to close upload image modal
-   * @memberof Header
-   */
-  closeUploadImageModal = () => {
-    let newUploadImageModalFormValues = { ...this.state.uploadImageFormValues };
-    Utils.assignEmptyStringToAllKeysInObj(newUploadImageModalFormValues);
-    const currentUploadImageFormValidationClassnames = {
-      ...this.uploadImageFormValidationClassnames
+    /**
+     * Event handler called when the description input field is changed inside the upload image/item modal
+     * @param event default parameter on which the event handler is called
+     * @memberof Header
+     */
+    changeDescriptionHandlerInUploadImageModal = event => {
+        let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
+        currentUploadImageFormValues.description = event.target.value;
+        this.setState({
+            uploadImageFormValues: currentUploadImageFormValues
+        });
     };
 
-    currentUploadImageFormValidationClassnames.image =
-      Constants.DisplayClassname.DISPLAY_NONE;
-    currentUploadImageFormValidationClassnames.description =
-      Constants.DisplayClassname.DISPLAY_NONE;
-    currentUploadImageFormValidationClassnames.quantityAvailable =
-      Constants.DisplayClassname.DISPLAY_NONE;
-      currentUploadImageFormValidationClassnames.pricePerUnit =
-      Constants.DisplayClassname.DISPLAY_NONE;
-      currentUploadImageFormValidationClassnames.expiryDate =
-      Constants.DisplayClassname.DISPLAY_NONE;
-
-    this.setState({
-      isUploadModalOpen: false,
-      uploadImageFormValues: newUploadImageModalFormValues,
-      uploadImageFormValidationClassnames: currentUploadImageFormValidationClassnames
-    });
-  };
-
-
-
-  /**
-   * Event handler called when the 'Upload' button inside the upload image/item modal is clicked
-   * @memberof Header
-   */
-  uploadClickHandlerInUploadModal = () => {
-    // finding the class names for the desciption ,qty,price,exp date validation messages - to be displayed or not
-    const image_validation_classname = UtilsUI.findValidationMessageClassname(
-      this.state.uploadImageFormValues.imagePreviewUrl,
-      Constants.ValueTypeEnum.FORM_FIELD
-    );
-    const description_validation_classname = UtilsUI.findValidationMessageClassname(
-      this.state.uploadImageFormValues.description,
-      Constants.ValueTypeEnum.FORM_FIELD
-    );
-    const quantity_available_validation_classname = UtilsUI.findValidationMessageClassname(
-        this.state.uploadImageFormValues.quantityAvailable,
-        Constants.ValueTypeEnum.FORM_FIELD
-      );
-
-      const price_per_unit_validation_classname = UtilsUI.findValidationMessageClassname(
-        this.state.uploadImageFormValues.pricePerUnit,
-        Constants.ValueTypeEnum.FORM_FIELD
-      );
-      const expiry_date_validation_classname = UtilsUI.findValidationMessageClassname(
-        this.state.uploadImageFormValues.expiryDate,
-        Constants.ValueTypeEnum.FORM_FIELD
-      );
-    
-
-    // setting the class names for the desciption and hashtags validation messages - to be displayed or not
-    let currentUploadImageFormValidationClassnames = {
-      ...this.state.uploadImageFormValidationClassnames
+    /**
+     * Event handler called when the quantity available input field is changed inside the upload image modal
+     * @param event default parameter on which the event handler is called
+     * @memberof Header
+     */
+    changeQuantityAvailableHandlerInUploadImageModal = event => {
+        let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
+        currentUploadImageFormValues.quantityAvailable = event.target.value;
+        this.setState({
+            uploadImageFormValues: currentUploadImageFormValues
+        });
     };
-    currentUploadImageFormValidationClassnames.image = image_validation_classname;
-    currentUploadImageFormValidationClassnames.description = description_validation_classname;
-    currentUploadImageFormValidationClassnames.quantityAvailable = quantity_available_validation_classname;
-    currentUploadImageFormValidationClassnames.pricePerUnit=price_per_unit_validation_classname;
-    currentUploadImageFormValidationClassnames.expiryDate=expiry_date_validation_classname;
 
-    if (
-      Utils.isAnyValueOfObjectUndefinedOrNullOrEmpty(
-        this.state.uploadImageFormValues
-      )
-    ) {
-      this.setState({
-        uploadImageFormValidationClassnames: currentUploadImageFormValidationClassnames
-      });
-    } else {
-      const imageDetails = {
+    /**
+     * Event handler called when the price per unit  input field is changed inside the upload image modal
+     * @param event default parameter on which the event handler is called
+     * @memberof Header
+     */
+    changePricePerUnitHandlerInUploadImageModal = event => {
+        let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
+        currentUploadImageFormValues.pricePerUnit = event.target.value;
+        this.setState({
+            uploadImageFormValues: currentUploadImageFormValues
+        });
+    };
 
-        id: Math.floor(new Date().getTime() / 1000),
-      item_name: this.state.uploadImageFormValues.description,
-      photo_URL: this.state.uploadImageFormValues.imagePreviewUrl,
-      price: this.state.uploadImageFormValues.pricePerUnit,
-      quantity: this.state.uploadImageFormValues.quantityAvailable,
-      expdate: this.state.uploadImageFormValues.expiryDate
-        
-      };
+    /**
+     * Event handler called when the expiry date   input field is changed inside the upload image modal
+     * @param event default parameter on which the event handler is called
+     * @memberof Header
+     */
+    changeExpiryDateHandlerInUploadImageModal = event => {
+        let currentUploadImageFormValues = { ...this.state.uploadImageFormValues };
+        currentUploadImageFormValues.expiryDate = event.target.value;
+        this.setState({
+            uploadImageFormValues: currentUploadImageFormValues
+        });
+    };
 
-      this.props.uploadNewImage(imageDetails);
-      console.log(this.state.uploadImageFormValues);
-      console.log(imageDetails);
-      console.log(imageDetails.photo_URL);
-      this.closeUploadImageModal();
-    }
-  };
+
+    /**
+     * Event handler called when the upload button inside the header is clicked to open the upload image modal
+     * @memberof Header
+     */
+    openUploadImageModal = () => {
+        this.setState({
+            isUploadModalOpen: true
+        });
+    };
+
+    /**
+     * Event handler called to close upload image modal
+     * @memberof Header
+     */
+    closeUploadImageModal = () => {
+        let newUploadImageModalFormValues = { ...this.state.uploadImageFormValues };
+        Utils.assignEmptyStringToAllKeysInObj(newUploadImageModalFormValues);
+        const currentUploadImageFormValidationClassnames = {
+            ...this.uploadImageFormValidationClassnames
+        };
+
+        currentUploadImageFormValidationClassnames.image =
+            Constants.DisplayClassname.DISPLAY_NONE;
+        currentUploadImageFormValidationClassnames.description =
+            Constants.DisplayClassname.DISPLAY_NONE;
+        currentUploadImageFormValidationClassnames.quantityAvailable =
+            Constants.DisplayClassname.DISPLAY_NONE;
+        currentUploadImageFormValidationClassnames.pricePerUnit =
+            Constants.DisplayClassname.DISPLAY_NONE;
+        currentUploadImageFormValidationClassnames.expiryDate =
+            Constants.DisplayClassname.DISPLAY_NONE;
+
+        this.setState({
+            isUploadModalOpen: false,
+            uploadImageFormValues: newUploadImageModalFormValues,
+            uploadImageFormValidationClassnames: currentUploadImageFormValidationClassnames
+        });
+    };
+
+
+
+    /**
+     * Event handler called when the 'Upload' button inside the upload image/item modal is clicked
+     * @memberof Header
+     */
+    uploadClickHandlerInUploadModal = () => {
+        // finding the class names for the desciption ,qty,price,exp date validation messages - to be displayed or not
+        const image_validation_classname = UtilsUI.findValidationMessageClassname(
+            this.state.uploadImageFormValues.imagePreviewUrl,
+            Constants.ValueTypeEnum.FORM_FIELD
+        );
+        const description_validation_classname = UtilsUI.findValidationMessageClassname(
+            this.state.uploadImageFormValues.description,
+            Constants.ValueTypeEnum.FORM_FIELD
+        );
+        const quantity_available_validation_classname = UtilsUI.findValidationMessageClassname(
+            this.state.uploadImageFormValues.quantityAvailable,
+            Constants.ValueTypeEnum.FORM_FIELD
+        );
+
+        const price_per_unit_validation_classname = UtilsUI.findValidationMessageClassname(
+            this.state.uploadImageFormValues.pricePerUnit,
+            Constants.ValueTypeEnum.FORM_FIELD
+        );
+        const expiry_date_validation_classname = UtilsUI.findValidationMessageClassname(
+            this.state.uploadImageFormValues.expiryDate,
+            Constants.ValueTypeEnum.FORM_FIELD
+        );
+
+
+        // setting the class names for the desciption and hashtags validation messages - to be displayed or not
+        let currentUploadImageFormValidationClassnames = {
+            ...this.state.uploadImageFormValidationClassnames
+        };
+        currentUploadImageFormValidationClassnames.image = image_validation_classname;
+        currentUploadImageFormValidationClassnames.description = description_validation_classname;
+        currentUploadImageFormValidationClassnames.quantityAvailable = quantity_available_validation_classname;
+        currentUploadImageFormValidationClassnames.pricePerUnit = price_per_unit_validation_classname;
+        currentUploadImageFormValidationClassnames.expiryDate = expiry_date_validation_classname;
+
+        if (
+            Utils.isAnyValueOfObjectUndefinedOrNullOrEmpty(
+                this.state.uploadImageFormValues
+            )
+        ) {
+            this.setState({
+                uploadImageFormValidationClassnames: currentUploadImageFormValidationClassnames
+            });
+        } else {
+            const imageDetails = {
+
+                id: Math.floor(new Date().getTime() / 1000),
+                item_name: this.state.uploadImageFormValues.description,
+                photo_URL: this.state.uploadImageFormValues.imagePreviewUrl,
+                price: this.state.uploadImageFormValues.pricePerUnit,
+                quantity: this.state.uploadImageFormValues.quantityAvailable,
+                expdate: this.state.uploadImageFormValues.expiryDate
+
+            };
+
+            this.props.uploadNewImage(imageDetails);
+            console.log(this.state.uploadImageFormValues);
+            console.log(imageDetails);
+            console.log(imageDetails.photo_URL);
+            this.closeUploadImageModal();
+        }
+    };
 
 
     /**
@@ -707,6 +708,7 @@ class Header extends Component {
             );
         }
 
+        
         // upload button to be rendered inside the header
         let uploadButtonToRender = null;
         if (this.props.showUpload) {
@@ -779,7 +781,7 @@ class Header extends Component {
                             </FormHelperText>
                         </FormControl>
 
-                        
+
                         <br />
                         <FormControl required>
                             <InputLabel htmlFor="price">Price per unit</InputLabel>
@@ -797,7 +799,7 @@ class Header extends Component {
                                 <span className="error-msg">required</span>
                             </FormHelperText>
                         </FormControl>
-                        
+
                         <br />
                         <FormControl required>
                             <InputLabel htmlFor="quantity">Quantity Available</InputLabel>
@@ -815,7 +817,7 @@ class Header extends Component {
                                 <span className="error-msg">required</span>
                             </FormHelperText>
                         </FormControl>
-                        
+
                         <br />
                         <FormControl required>
                             <InputLabel htmlFor="expirydate">Expiry Date</InputLabel>
@@ -848,34 +850,7 @@ class Header extends Component {
             );
         }
 
-        // user profile icon to be rendered inside the header
-        let profileIconButtonToRender = null;
-        if (this.props.showProfile) {
-            profileIconButtonToRender = (
-                <div className="header-user-profile-container">
-                    <div id="user-profile" onClick={this.openUserProfileHandler}><div><img src={accountCircle} className="accountCircle-logo" alt="accountCircle" /></div><div id="user-right">{sessionStorage.getItem("user-details")}</div></div>
-
-                    {this.state.showUserProfileDropDown ? (
-                        <div className="user-profile-drop-down">
-                            {this.props.enableMyAccount ? (
-                                <div>
-                                    <Link to="/profile" className="my-account-dropdown-menu-item">
-                                        My Account
-                      </Link>
-                                    <hr />
-                                </div>
-                            ) : null}
-                            <div
-                                onClick={this.logoutClickHandler}
-                                className="logout-dropdown-menu-item"
-                            >
-                                Logout
-                  </div>
-                        </div>
-                    ) : null}
-                </div>
-            );
-        }
+        
 
         //loginsnackbar component to be rendered upon successful login
         let loginSnackBarToRender = null;
@@ -911,9 +886,8 @@ class Header extends Component {
 
             <div className="header-main-container">
                 <div className="header-logo-container">{logoToRender}</div>
-                {loginButtonModalToRender}
-                {profileIconButtonToRender}
                 {uploadButtonToRender}
+                {loginButtonModalToRender}
                 {loginSnackBarToRender}
                 {registerSnackBarToRender}
             </div>

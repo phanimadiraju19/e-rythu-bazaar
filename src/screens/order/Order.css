@@ -1,0 +1,29 @@
+.restaurant-menu-items{
+    padding: 50px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: top;
+}
+
+.menu-items{
+    width: 50%;
+}
+
+.my-cart{
+    float: right;
+    width: 700px;
+    margin-left: 80px;
+    
+}
+.card{
+    padding: 10px;
+}
+
+.item{
+    font-size: 18px;
+    min-width: 75%;
+}
+.added-item{
+    min-width: 43%;
+}
