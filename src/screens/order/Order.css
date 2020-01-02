@@ -1,4 +1,4 @@
-.restaurant-menu-items{
+.order-menu-items{
     padding: 50px;
     display: flex;
     justify-content: flex-start;
@@ -27,3 +27,34 @@
 .added-item{
     min-width: 43%;
 }
+.CategoryName{
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    
+    
+}
+
+.Category-items{
+    display: flex;
+    align-items: baseline;
+   
+}
+.item-price{
+    min-width: 50px;
+ }
+ 
+ .item-add{
+   margin-left: 20px;
+ }
+ .badge{
+    margin: -0.25;
+    z-index: 0;
+}
+.cart-button {
+    width: 100%;
+ }
+ 
+ .item-total{
+     font-weight: 700;
+ }

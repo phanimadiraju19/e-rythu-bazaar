@@ -215,7 +215,7 @@ class Order extends Component{
                             ))}
                             <br/>
                             <div>
-                                <span  className="item-total">TOTAL AMOUNT</span>
+                                <span  className="item-total">TOTAL AMOUNT</span>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <span className="item-rupee"><i className="fa fa-inr" aria-hidden="true"></i>  {(this.state.totalCartItemsValue).toFixed(2)}</span>
                             </div>
                             <br/>
@@ -230,7 +230,7 @@ class Order extends Component{
                                         }}
                                         
                                         open={this.state.open}
-                                        autoHideDuration={1000}
+                                        autoHideDuration={3000}
                                         onClose={this.handleClose}
                                         ContentProps={{
                                             'aria-describedby': 'message-id',
