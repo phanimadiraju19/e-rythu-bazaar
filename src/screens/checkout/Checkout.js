@@ -33,6 +33,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import {withStyles} from '@material-ui/core/styles';
 import 'font-awesome/css/font-awesome.min.css';
+import statesData from "../../common/statesData";
+import paymentsData from "../../common/paymentsData";
 
 
 const styles = theme => ({
@@ -374,7 +376,7 @@ class Checkout extends Component {
                                                             value={this.state.stateId}
                                                             onChange={this.inputStateChangeHandler}
                                                         >
-                                                            {this.state.states.map(loc => (
+                                                            {statesData.map(loc => (
                                                                 <MenuItem key={"loc" + loc.id} value={loc.id}>
                                                                     {loc.state_name}
                                                                 </MenuItem>
@@ -414,10 +416,10 @@ class Checkout extends Component {
                                                             value={this.state.paymentId}
                                                             onChange={this.paymentHandleChange}
                                                         >
-                                                        {paymentModes.map((payment) => {
+                                                        {paymentsData.map((payment) => {
                                                                 return (
                                                                     <FormControlLabel key={payment.id}
-                                                                                      value={""+ payment.id}
+                                                                                      value={"payment"+ payment.id}
                                                                                       defaultValue={payment.payment_name}
                                                                                       control={<Radio/>}
                                                                                       label={payment.payment_name}/>

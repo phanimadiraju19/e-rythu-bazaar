@@ -1,0 +1,2 @@
+let paymentsData=[{"id":"2ddf6a5e-ecd0-11e8-8eb2-f2801f1b9fd1","payment_name":"Cash on Delivery"},{"id":"2ddf6284-ecd0-11e8-8eb2-f2801f1b9fd1","payment_name":"Google Pay"},{"id":"2ddf63b0-ecd0-11e8-8eb2-f2801f1b9fd1","payment_name":"Net Banking"},{"id":"2ddf567c-ecd0-11e8-8eb2-f2801f1b9fd1","payment_name":"Paytm"},{"id":"2ddf53f2-ecd0-11e8-8eb2-f2801f1b9fd1","payment_name":"Debit/Credit Card"}]
+export default paymentsData;
