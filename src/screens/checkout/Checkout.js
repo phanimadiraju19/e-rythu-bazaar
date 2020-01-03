@@ -254,7 +254,7 @@ class Checkout extends Component {
     confirmOrderHandler =() =>{
         this.setState({
             open: true,
-            orderNotificationMessage: "Your order placed successfully! Your order ID is .. as ..Generated from backend !! "
+            orderNotificationMessage: "Your order placed successfully! Your order ID is xyz123 !! (as ..Generated from backend)  "
         });
     }
 
@@ -263,7 +263,7 @@ class Checkout extends Component {
         const steps = getSteps();
         const {activeStep} = this.state;
         const {cartItems, totalCartItemsValue} = this.props.location;
-        let paymentModes = this.state.paymentModes;
+        //let paymentModes = this.state.paymentModes;
         return(
             <div className="checkout">
                 <Header {...this.props} 
@@ -463,7 +463,7 @@ class Checkout extends Component {
                             )}
                         </div>
                     </div>
-                    </div>
+                    
                     <div className="orderSummary">
                         <Card style={{height: '100%'}}>
                             <CardContent>
@@ -471,13 +471,12 @@ class Checkout extends Component {
                                             gutterBottom variant="h5" component="h2">
                                     Summary  
                                 </Typography>
-                                {console.log(cartItems)}
-                                {console.log(totalCartItemsValue)}
+                                
                                 {cartItems !== undefined && cartItems.map(item => (
                                     <div className="order-body-container" key={"item" + item.id}>
                                         <div className="div-container div-items"> {item.item_name}
                                         </div>
-                                        <div className="div-container"> {item.quantity}</div>
+                                        <div className="div-container"> {item.quantity} &nbsp;Kg</div>
                                         <div className="div-container"><i className="fa fa-inr" aria-hidden="true"></i> {item.price * item.quantity}
                                         </div>
                                     </div>
@@ -492,7 +491,7 @@ class Checkout extends Component {
                                 <br/>
                                 <Button className="button-container"  variant="contained"
                                         onClick={this.confirmOrderHandler} color="primary">
-                                    Place Order
+                                    Confirm Order
                                 </Button>
                                 <Snackbar
                                     anchorOrigin={{
@@ -521,7 +520,7 @@ class Checkout extends Component {
                             </CardContent>
                         </Card>
                     </div>
-
+</div>
             </div>
         );
     }
